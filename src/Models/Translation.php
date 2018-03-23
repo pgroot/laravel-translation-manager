@@ -23,6 +23,10 @@ class Translation extends Model{
     protected $table = 'ltm_translations';
     protected $guarded = array('id', 'created_at', 'updated_at');
 
+    public function getTable() {
+        return config('translation-manager.database.table', $this->table);
+    }
+
     public function scopeOfTranslatedGroup($query, $group)
     {
         return $query->where('group', $group)->whereNotNull('value');

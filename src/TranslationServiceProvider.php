@@ -15,9 +15,13 @@ class TranslationServiceProvider extends BaseTranslationServiceProvider {
 
         $this->registerLoader();
 
+        $this->app->singleton('translation.db_loader', function($app) {
+            return new DatabaseLoader($app['files'], $app['path.lang']);
+        });
+
         $this->app->singleton('translator', function($app)
         {
-            $loader = $app['translation.loader'];
+            $loader = $app['translation.db_loader'];
 
             // When registering the translator component, we'll need to set the default
             // locale as well as the fallback locale. So, we'll grab the application

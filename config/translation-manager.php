@@ -10,9 +10,29 @@ return array(
     | The default group settings for the elFinder routes.
     |
     */
+    'default_group' => 'json',
+
     'route' => [
-        'prefix' => 'translations',
+        'prefix' => 'trans',
         'middleware' => 'auth',
+    ],
+
+	'paths' => [
+        'app',
+        'database',
+        'resources',
+        'routes',
+        'tests'
+    ],
+
+	'cache' => [
+	    'enable' => true,
+        'tag' => 'trans'
+    ],
+
+	'databse' => [
+	    'table' => 'ltm_translations',
+        'key_as_default_value' => true
     ],
 
 	/**

@@ -120,7 +120,11 @@ class Controller extends BaseController
 
     public function postFind()
     {
-        $numFound = $this->manager->findTranslations();
+        $paths = config('translation-manager.paths', null);
+        $numFound = 0;
+        foreach($paths as $path) {
+            $numFound += $this->manager->findTranslations(base_path($path));
+        }
 
         return ['status' => 'ok', 'counter' => (int) $numFound];
     }
