@@ -1,6 +1,6 @@
 {
     "name": "pgroot/laravel-translation-manager",
-    "description": "Manage Laravel Translations",
+    "description": "based on 'barryvdh/laravel-translation-manager'.extend database loader , cache and more option",
     "keywords": ["laravel", "translations", "translator"],
     "license": "MIT",
     "authors": [
