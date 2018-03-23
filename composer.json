@@ -1,5 +1,5 @@
 {
-    "name": "barryvdh/laravel-translation-manager",
+    "name": "pgroot/laravel-translation-manager",
     "description": "Manage Laravel Translations",
     "keywords": ["laravel", "translations", "translator"],
     "license": "MIT",
@@ -7,6 +7,10 @@
         {
             "name": "Barry vd. Heuvel",
             "email": "barryvdh@gmail.com"
+        },
+        {
+            "name": "Groot",
+            "email": "pzyme@outlook.com"
         }
     ],
     "require": {
