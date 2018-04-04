@@ -11,6 +11,7 @@ return array(
     |
     */
     'default_group' => 'json',
+    'notify_miss_key_runtime' => true,
 
     'route' => [
         'prefix' => 'trans',
@@ -30,9 +31,11 @@ return array(
         'tag' => 'trans'
     ],
 
-	'databse' => [
+	'database' => [
 	    'table' => 'ltm_translations',
-        'key_as_default_value' => true
+        'key_as_default_value' => true,
+        'updated_column' => 'updated_at',
+        'created_column' => 'created_at'
     ],
 
 	/**

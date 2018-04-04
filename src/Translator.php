@@ -22,7 +22,9 @@ class Translator extends LaravelTranslator {
         $result = parent::get($key, $replace, $locale, false);
 
         if($result === $key){
-            $this->notifyMissingKey($key);
+            if(config('translation-manager.notify_miss_key_runtime')) {
+                $this->notifyMissingKey($key);
+            }
 
             // Reget with fallback
             $result = parent::get($key, $replace, $locale, $fallback);

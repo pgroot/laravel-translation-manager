@@ -27,6 +27,14 @@ class Translation extends Model{
         return config('translation-manager.database.table', $this->table);
     }
 
+    public function getCreatedAtColumn() {
+        return config('translation-manager.database.created_column', static::UPDATED_AT);
+    }
+
+    public function getUpdatedAtColumn() {
+        return config('translation-manager.database.updated_column', static::UPDATED_AT);
+    }
+
     public function scopeOfTranslatedGroup($query, $group)
     {
         return $query->where('group', $group)->whereNotNull('value');
