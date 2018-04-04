@@ -90,15 +90,39 @@ class Controller extends BaseController
             $value = request()->get('value');
 
             list($locale, $key) = explode('|', $name, 2);
-            $translation = Translation::firstOrNew([
+
+            $where = [
                 'locale' => $locale,
                 'group' => $group,
                 'key' => $key,
-            ]);
-            $translation->value = (string) $value ?: null;
-            $translation->status = Translation::STATUS_CHANGED;
-            $translation->save();
-            return array('status' => 'ok');
+            ];
+            $exists = Translation::where($where)->exists();
+            if($exists) {
+                $translation = Translation::where($where)->update($this->manager->dataWithTimestamp([
+                    'locale' => $locale,
+                    'group' => $group,
+                    'key' => $key,
+                    'value' => (string) $value ?: null,
+                    'status' => Translation::STATUS_CHANGED
+                ], true));
+            } else {
+                $translation = new Translation();
+                $translation->setRawAttributes($this->manager->dataWithTimestamp([
+                    'locale' => $locale,
+                    'group' => $group,
+                    'key' => $key,
+                    'value' => (string) $value ?: null,
+                    'status' => Translation::STATUS_CHANGED
+                ], false));
+                $translation->save();
+            }
+            return array('status' => 'ok', 'exists' => $this->manager->dataWithTimestamp([
+                'locale' => $locale,
+                'group' => $group,
+                'key' => $key,
+                'value' => (string) $value ?: null,
+                'status' => Translation::STATUS_CHANGED
+            ], $exists));
         }
     }
 

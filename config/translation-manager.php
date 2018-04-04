@@ -34,8 +34,9 @@ return array(
 	'database' => [
 	    'table' => 'ltm_translations',
         'key_as_default_value' => true,
-        'updated_column' => 'updated_at',
-        'created_column' => 'created_at'
+        'updated_column' => 'updatedAt',
+        'created_column' => 'createdAt',
+        'time_format' => 'Y-m-d H:i:s'
     ],
 
 	/**

@@ -1,5 +1,6 @@
 <?php namespace Barryvdh\TranslationManager;
 
+use Carbon\Carbon;
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Events\Dispatcher;
 use Barryvdh\TranslationManager\Models\Translation;
@@ -8,8 +9,6 @@ use Illuminate\Support\Facades\DB;
 use Symfony\Component\Finder\Finder;
 
 class Manager{
-
-    const JSON_GROUP = '_json';
 
     protected $jsonGroup = '_json';
 
@@ -43,12 +42,12 @@ class Manager{
     public function missingKey($namespace, $group, $key)
     {
         if(!in_array($group, $this->config['exclude_groups'])) {
-            Translation::firstOrCreate(array(
+            Translation::firstOrCreate($this->dataWithTimestamp([
                 'locale' => $this->app['config']['app.locale'],
                 'group' => $group,
                 'key' => $key,
                 'value' => config('translation-manager.database.key_as_default_value', false) ? $key : null
-            ));
+            ]));
         }
     }
 
@@ -352,6 +351,26 @@ class Manager{
     protected function saveIgnoredLocales()
     {
         return $this->files->put($this->ignoreFilePath, json_encode($this->ignoreLocales));
+    }
+
+    public function dataWithTimestamp($data, $updated = false) {
+        $createdAtColumn = config('translation-manager.database.created_column', 'created_at');
+        $updatedAtColumn = config('translation-manager.database.updated_column', 'updated_at');
+        $format = config('translation-manager.database.time_format', 'Y-m-d H:i:s');
+
+        $now = Carbon::now();
+
+        $timestamp = [];
+        if($updated) {
+            $timestamp[$updatedAtColumn] = $now->format($format);
+        } else {
+            $timestamp  = [
+                $createdAtColumn => $now->format($format),
+                $updatedAtColumn => $now->format($format),
+            ];
+        }
+
+        return array_merge($data, $timestamp);
     }
 
 }

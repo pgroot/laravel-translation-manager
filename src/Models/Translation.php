@@ -21,18 +21,16 @@ class Translation extends Model{
     const STATUS_CHANGED = 1;
 
     protected $table = 'ltm_translations';
-    protected $guarded = array('id', 'created_at', 'updated_at');
+    public $timestamps = false;
+    protected $guarded = array('id');
+
+    public function __construct(array $attributes = [])
+    {
+        parent::__construct($attributes);
+    }
 
     public function getTable() {
         return config('translation-manager.database.table', $this->table);
-    }
-
-    public function getCreatedAtColumn() {
-        return config('translation-manager.database.created_column', static::UPDATED_AT);
-    }
-
-    public function getUpdatedAtColumn() {
-        return config('translation-manager.database.updated_column', static::UPDATED_AT);
     }
 
     public function scopeOfTranslatedGroup($query, $group)

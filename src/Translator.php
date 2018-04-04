@@ -25,12 +25,8 @@ class Translator extends LaravelTranslator {
             if(config('translation-manager.notify_miss_key_runtime')) {
                 $this->notifyMissingKey($key);
             }
-
             // Reget with fallback
             $result = parent::get($key, $replace, $locale, $fallback);
-
-        } else {
-            return $key;
         }
 
         return $result;
@@ -44,6 +40,12 @@ class Translator extends LaravelTranslator {
     protected function notifyMissingKey($key)
     {
         list($namespace, $group, $item) = $this->parseKey($key);
+
+        if(empty($item)) {
+            $item = $group;
+            $group = config('translation-manager.default_group');
+        }
+
         if($this->manager && $namespace === '*' && $group && $item ){
             $this->manager->missingKey($namespace, $group, $item);
         }
