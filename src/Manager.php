@@ -41,13 +41,26 @@ class Manager{
 
     public function missingKey($namespace, $group, $key)
     {
-        if(!in_array($group, $this->config['exclude_groups'])) {
-            Translation::firstOrCreate($this->dataWithTimestamp([
-                'locale' => $this->app['config']['app.locale'],
-                'group' => $group,
-                'key' => $key,
-                'value' => config('translation-manager.database.key_as_default_value', false) ? $key : null
-            ]));
+        if (!in_array($group, $this->config['exclude_groups'])) {
+            $placeholderAllLocales = config('translation-manager.placeholder_all_locales');
+
+            if ($placeholderAllLocales) {
+                foreach (config('app.available_locales', config('translation-manager.available_locales')) as $locale) {
+                    Translation::firstOrCreate($this->dataWithTimestamp([
+                        'locale' => $locale,
+                        'group' => $group,
+                        'key' => $key,
+                        'value' => config('translation-manager.database.key_as_default_value', false) ? $key : null
+                    ]));
+                }
+            } else {
+                Translation::firstOrCreate($this->dataWithTimestamp([
+                    'locale' => $this->app['config']['app.locale'],
+                    'group' => $group,
+                    'key' => $key,
+                    'value' => config('translation-manager.database.key_as_default_value', false) ? $key : null
+                ]));
+            }
         }
     }
 
@@ -184,6 +197,9 @@ class Manager{
 
         // Add the translations to the database, if not existing.
         foreach($groupKeys as $key) {
+            if(strpos($key, '.') === false) {
+                continue;
+            }
             // Split the group and item
             list($group, $item) = explode('.', $key, 2);
             $this->missingKey('', $group, $item);

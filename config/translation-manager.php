@@ -12,6 +12,12 @@ return array(
     */
     'default_group' => 'json',
     'notify_miss_key_runtime' => true,
+    'placeholder_all_locales' => true,
+
+    'available_locales' => [
+        'en-us',
+        'zh-cn'
+    ],
 
     'route' => [
         'prefix' => 'trans',
