@@ -46,7 +46,11 @@ class Manager{
 
             if ($placeholderAllLocales) {
                 foreach (config('app.available_locales', config('translation-manager.available_locales')) as $locale) {
-                    Translation::firstOrCreate($this->dataWithTimestamp([
+                    Translation::firstOrCreate([
+                        'locale' => $locale,
+                        'group' => $group,
+                        'key' => $key,
+                    ], $this->dataWithTimestamp([
                         'locale' => $locale,
                         'group' => $group,
                         'key' => $key,
@@ -54,7 +58,11 @@ class Manager{
                     ]));
                 }
             } else {
-                Translation::firstOrCreate($this->dataWithTimestamp([
+                Translation::firstOrCreate([
+                    'locale' => config('translation-manager.base_locale', $this->app['config']['app.locale']),
+                    'group' => $group,
+                    'key' => $key,
+                ],$this->dataWithTimestamp([
                     'locale' => $this->app['config']['app.locale'],
                     'group' => $group,
                     'key' => $key,

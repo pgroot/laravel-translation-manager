@@ -18,6 +18,7 @@ return array(
         'en-us',
         'zh-cn'
     ],
+	'base_locale' => 'en-us',
 
     'route' => [
         'prefix' => 'trans',
